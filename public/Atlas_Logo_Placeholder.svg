@@ -1,0 +1,35 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="hexOuter">
+      <polygon points="256,20 462,138 462,374 256,492 50,374 50,138" />
+    </clipPath>
+    <clipPath id="hexInner">
+      <polygon points="256,34 449,145 449,367 256,478 63,367 63,145" />
+    </clipPath>
+    <linearGradient id="shimmer" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.55"/>
+      <stop offset="24%" stop-color="#FFFFFF" stop-opacity="0.08"/>
+      <stop offset="46%" stop-color="#FFFFFF" stop-opacity="0"/>
+      <stop offset="78%" stop-color="#000000" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.22"/>
+    </linearGradient>
+    <pattern id="grain" width="10" height="10" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.4" fill="#000000" opacity="0.12"/>
+    </pattern>
+  </defs>
+
+  <rect width="512" height="512" fill="none"/>
+
+  <polygon points="256,20 462,138 462,374 256,492 50,374 50,138" fill="#E8A33D"/>
+
+  <g clip-path="url(#hexInner)">
+    <rect x="63" y="34" width="386" height="444" fill="#E8A33D"/>
+    <rect x="63" y="34" width="386" height="444" fill="url(#grain)"/>
+    <rect x="63" y="34" width="386" height="444" fill="url(#shimmer)"/>
+  </g>
+
+  <g clip-path="url(#hexInner)">
+    <path d="M 256 165 L 353 385 L 313 385 L 293 335 L 219 335 L 199 385 L 159 385 Z M 256 225 L 232 297 L 280 297 Z"
+          fill="#26190A" opacity="0.92"/>
+  </g>
+</svg>

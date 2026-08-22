@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#0B0D10"/>
+  <g transform="translate(118 184) scale(1.58)">
+    <polygon points="86,44 116,61 116,95 86,112 56,95 56,61" fill="#3A4450" opacity="0.65" transform="translate(10,8)"/>
+    <polygon points="76,34 106,51 106,85 76,102 46,85 46,51" fill="#E8A33D"/>
+    <path d="M30.295 8.475l-6.571 6.571-5.617-1.495-1.494-5.617 6.571-6.571c-3.298-0.851-6.953-0.005-9.534 2.577-2.737 2.737-3.544 6.678-2.422 10.126l-10.165 10.165v6.487h6.268l10.28-10.28c3.443 1.114 7.376 0.305 10.108-2.428 2.584-2.584 3.433-6.233 2.577-9.534z" fill="#0B0D10" transform="translate(50,42) scale(1.5)"/>
+  </g>
+  <text x="354" y="342" fill="#F5F6F4" font-family="Arial, Helvetica, sans-serif" font-size="92" font-weight="800" letter-spacing="-3">ServiceShadow</text>
+  <rect x="354" y="382" width="160" height="5" rx="2.5" fill="#E8A33D"/>
+</svg>

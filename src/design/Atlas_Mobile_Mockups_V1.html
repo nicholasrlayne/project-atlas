@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ServiceShadow — Mobile design concepts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0B0D10;
+  --cell:#14181D;
+  --cell-2:#1B2027;
+  --border:rgba(255,255,255,0.08);
+  --border-strong:rgba(255,255,255,0.14);
+  --chalk:#F5F6F4;
+  --mist:#9AA1A9;
+  --mist-dim:#666C74;
+  --amber:#E8A33D;
+  --amber-dim:#3A2A12;
+  --amber-ink:#26190A;
+  --dusk:#56697D;
+  --dusk-dim:#1B232C;
+  --dusk-ink:#0E1820;
+  --coral:#E2665B;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--ink);
+  background-image:
+    linear-gradient(30deg, rgba(255,255,255,.025) 12%, transparent 12.5%, transparent 87%, rgba(255,255,255,.025) 87.5%, rgba(255,255,255,.025)),
+    linear-gradient(150deg, rgba(255,255,255,.025) 12%, transparent 12.5%, transparent 87%, rgba(255,255,255,.025) 87.5%, rgba(255,255,255,.025)),
+    linear-gradient(30deg, rgba(255,255,255,.025) 12%, transparent 12.5%, transparent 87%, rgba(255,255,255,.025) 87.5%, rgba(255,255,255,.025)),
+    linear-gradient(150deg, rgba(255,255,255,.025) 12%, transparent 12.5%, transparent 87%, rgba(255,255,255,.025) 87.5%, rgba(255,255,255,.025)),
+    linear-gradient(60deg, rgba(255,255,255,.018) 25%, transparent 25.5%, transparent 75%, rgba(255,255,255,.018) 75%, rgba(255,255,255,.018)),
+    linear-gradient(60deg, rgba(255,255,255,.018) 25%, transparent 25.5%, transparent 75%, rgba(255,255,255,.018) 75%, rgba(255,255,255,.018));
+  background-size:44px 76px;
+  background-position:0 0, 0 0, 22px 38px, 22px 38px, 0 0, 22px 38px;
+  font-family:'Inter',sans-serif;
+  padding:64px 40px;
+}
+.board-head{
+  max-width:1400px;
+  margin:0 auto 48px;
+}
+.eyebrow{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:12px;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:var(--amber);
+  margin-bottom:12px;
+}
+.board-title{
+  font-family:'Manrope',sans-serif;
+  font-weight:700;
+  font-size:34px;
+  color:var(--chalk);
+  letter-spacing:-0.01em;
+}
+.board-sub{
+  color:var(--mist);
+  font-size:15px;
+  margin-top:10px;
+  max-width:640px;
+  line-height:1.6;
+}
+.gallery{
+  max-width:1400px;
+  margin:0 auto;
+  display:flex;
+  gap:40px;
+  flex-wrap:wrap;
+  align-items:flex-start;
+}
+.frame-wrap{width:300px;}
+.frame-label{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:12px;
+  color:var(--mist-dim);
+  letter-spacing:0.04em;
+  margin-top:18px;
+  padding-left:4px;
+}
+.frame-label b{color:var(--mist);font-weight:500;}
+
+.phone{
+  width:300px;
+  height:648px;
+  background:#000;
+  border-radius:42px;
+  padding:10px;
+  box-shadow:0 0 0 1px rgba(255,255,255,0.06);
+}
+.screen{
+  width:100%;
+  height:100%;
+  background:var(--ink);
+  border-radius:34px;
+  overflow:hidden;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+}
+.island{
+  position:absolute;
+  top:12px;left:50%;transform:translateX(-50%);
+  width:80px;height:22px;
+  background:#000;
+  border-radius:14px;
+  z-index:20;
+}
+.statusbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:16px 22px 4px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:12px;
+  color:var(--chalk);
+}
+.statusbar .dots{display:flex;gap:4px;align-items:center;}
+.statusbar .dots span{width:3px;height:8px;background:var(--chalk);border-radius:1px;display:inline-block;}
+
+.content{flex:1;overflow:hidden;padding:14px 18px 0;display:flex;flex-direction:column;}
+
+.hex{
+  clip-path:polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.hex-lg{width:150px;height:150px;background:var(--amber);}
+.hex-lg .hex-icon{font-size:38px;}
+.hex-md{width:76px;height:76px;background:var(--cell-2);border:1px solid var(--border-strong);}
+.hex-sm{width:40px;height:40px;background:var(--cell-2);}
+.hex-tag{width:22px;height:22px;background:var(--amber-dim);flex-shrink:0;}
+.hex-tag.dusk{background:var(--dusk-dim);}
+.hex-avatar{width:52px;height:52px;background:var(--amber);color:var(--amber-ink);font-family:'Manrope';font-weight:700;font-size:16px;}
+.hex-nav{width:34px;height:34px;background:transparent;border:1px solid var(--border-strong);}
+.hex-nav.active{background:var(--amber-dim);border-color:var(--amber);}
+
+.greet{font-family:'Manrope';font-weight:700;font-size:22px;color:var(--chalk);}
+.date{font-size:13px;color:var(--mist);margin-top:2px;}
+
+.brief-card{
+  background:var(--cell);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:14px 16px;
+  margin-top:16px;
+  display:flex;
+  gap:14px;
+}
+.brief-stat{flex:1;}
+.brief-num{font-family:'Manrope';font-weight:700;font-size:19px;color:var(--chalk);}
+.brief-lbl{font-size:11px;color:var(--mist);margin-top:2px;}
+
+.cta-row{display:flex;flex-direction:column;align-items:center;margin:22px 0 14px;}
+.cta-label{font-family:'Manrope';font-weight:600;font-size:14px;color:var(--amber-ink);position:relative;top:-2px;}
+.cta-caption{font-size:12px;color:var(--mist);margin-top:10px;}
+
+.sub-row{display:flex;gap:16px;justify-content:center;margin-bottom:18px;}
+.sub-item{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.sub-item span{font-size:11px;color:var(--mist);}
+
+.section-lbl{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  letter-spacing:0.06em;
+  text-transform:uppercase;
+  color:var(--mist-dim);
+  margin-bottom:10px;
+}
+.remind-row{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 0;
+  border-bottom:1px solid var(--border);
+}
+.remind-text{flex:1;}
+.remind-cust{font-size:13px;color:var(--chalk);font-weight:500;}
+.remind-sub{font-size:11.5px;color:var(--mist);margin-top:1px;}
+
+.navbar{
+  display:flex;justify-content:space-around;align-items:center;
+  padding:14px 0 20px;
+  border-top:1px solid var(--border);
+  margin-top:auto;
+}
+
+.topbar{display:flex;align-items:center;gap:10px;padding-bottom:6px;}
+.back-ic{width:26px;height:26px;border-radius:8px;background:var(--cell-2);display:flex;align-items:center;justify-content:center;color:var(--chalk);font-size:13px;}
+.topbar-title{flex:1;}
+.topbar-title .name{font-size:14px;color:var(--chalk);font-weight:600;}
+.topbar-title .sub{font-size:11px;color:var(--mist);margin-top:1px;}
+.timer-chip{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;color:var(--coral);
+  background:rgba(226,102,91,0.12);
+  border:1px solid rgba(226,102,91,0.3);
+  padding:4px 8px;border-radius:8px;
+  display:flex;align-items:center;gap:5px;
+}
+.rec-dot{width:6px;height:6px;background:var(--coral);border-radius:50%;animation:pulse 1.4s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.25;}}
+
+.mic-stage{display:flex;flex-direction:column;align-items:center;padding:20px 0 10px;position:relative;}
+.mic-ring{
+  position:absolute;top:16px;
+  width:172px;height:172px;
+  border:1px solid rgba(232,163,61,0.35);
+  clip-path:polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  animation:pulse 1.8s infinite;
+}
+.waveform{display:flex;gap:3px;align-items:center;height:24px;}
+.waveform span{width:3px;background:var(--amber-ink);border-radius:2px;}
+
+.type-pill{
+  margin-top:16px;
+  display:flex;align-items:center;gap:7px;
+  background:var(--cell-2);
+  border:1px solid var(--border-strong);
+  padding:9px 16px;
+  border-radius:20px;
+  font-size:12.5px;color:var(--mist);
+}
+
+.cam-chip{
+  position:absolute;right:14px;top:118px;
+  display:flex;flex-direction:column;align-items:center;gap:5px;
+}
+.cam-chip span{font-size:10px;color:var(--mist);}
+
+.transcript-card{
+  background:var(--cell);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:13px 14px;
+  margin-top:14px;
+  font-size:12.5px;
+  color:var(--mist);
+  line-height:1.6;
+}
+.transcript-card .live{font-size:10px;color:var(--dusk);font-family:'IBM Plex Mono',monospace;letter-spacing:0.06em;margin-bottom:6px;display:block;}
+.task-detect{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--dusk-dim);
+  border:1px solid rgba(79,209,179,0.3);
+  padding:5px 10px;border-radius:8px;
+  font-size:11px;color:var(--dusk);
+  margin-top:10px;
+}
+
+.page-title{font-family:'Manrope';font-weight:700;font-size:19px;color:var(--chalk);margin:4px 0 2px;}
+.page-sub{font-size:12px;color:var(--mist);margin-bottom:14px;}
+
+.sum-card{
+  background:var(--cell);border:1px solid var(--border);
+  border-radius:14px;padding:13px 14px;margin-bottom:14px;
+  font-size:12.5px;color:var(--mist);line-height:1.6;
+}
+.task-row{display:flex;align-items:flex-start;gap:10px;padding:8px 0;}
+.task-row .t-text{font-size:12.5px;color:var(--chalk);}
+.task-row .t-sub{font-size:11px;color:var(--mist);margin-top:2px;}
+
+.proposal-card{
+  background:var(--cell);border:1px solid var(--border-strong);
+  border-radius:14px;padding:14px;margin:6px 0 14px;
+}
+.proposal-top{display:flex;justify-content:space-between;align-items:baseline;}
+.proposal-name{font-size:13px;color:var(--chalk);font-weight:600;}
+.proposal-price{font-family:'Manrope';font-weight:700;font-size:17px;color:var(--amber);}
+.proposal-desc{font-size:11.5px;color:var(--mist);margin-top:6px;line-height:1.5;}
+
+.photo-strip{display:flex;gap:8px;margin-bottom:16px;}
+.photo-thumb{
+  flex:1;aspect-ratio:1;background:var(--cell-2);
+  border-radius:10px;border:1px solid var(--border);
+}
+
+.action-bar{
+  display:flex;gap:10px;
+  padding:14px 0 20px;
+  border-top:1px solid var(--border);
+  margin-top:auto;
+}
+.btn-primary{
+  flex:1;background:var(--amber);color:var(--amber-ink);
+  font-family:'Manrope';font-weight:600;font-size:13px;
+  border-radius:12px;padding:12px 0;text-align:center;
+}
+.btn-ghost{
+  width:44px;background:var(--cell-2);border:1px solid var(--border-strong);
+  border-radius:12px;display:flex;align-items:center;justify-content:center;
+  color:var(--chalk);font-size:14px;
+}
+
+.cust-head{display:flex;gap:12px;align-items:center;padding:6px 0 16px;}
+.cust-name{font-size:15px;color:var(--chalk);font-weight:600;}
+.cust-meta{font-size:11.5px;color:var(--mist);margin-top:2px;}
+
+.tl-row{display:flex;gap:12px;padding-bottom:18px;position:relative;}
+.tl-row:not(:last-child)::before{
+  content:'';position:absolute;left:11px;top:26px;bottom:-2px;
+  width:1px;background:var(--border);
+}
+.tl-body{flex:1;padding-top:2px;}
+.tl-title{font-size:12.5px;color:var(--chalk);font-weight:500;}
+.tl-date{font-size:10.5px;color:var(--mist-dim);font-family:'IBM Plex Mono',monospace;margin-top:2px;}
+.tl-desc{font-size:11.5px;color:var(--mist);margin-top:4px;line-height:1.5;}
+
+.chat-row{display:flex;gap:8px;margin-bottom:16px;align-items:flex-end;}
+.chat-row.user{justify-content:flex-end;}
+.bubble{
+  max-width:210px;padding:10px 13px;border-radius:14px;
+  font-size:12.5px;line-height:1.55;
+}
+.bubble.ai{background:var(--cell);border:1px solid var(--border);color:var(--chalk);border-bottom-left-radius:4px;}
+.bubble.user{background:var(--amber-dim);color:var(--chalk);border-bottom-right-radius:4px;}
+.bubble ul{margin:6px 0 0 16px;padding:0;}
+.bubble li{margin-bottom:3px;color:var(--mist);}
+.ask-input{
+  margin-top:auto;
+  display:flex;align-items:center;gap:8px;
+  background:var(--cell-2);border:1px solid var(--border-strong);
+  border-radius:22px;padding:8px 8px 8px 16px;
+  margin-bottom:18px;
+}
+.ask-input span{flex:1;font-size:12px;color:var(--mist-dim);}
+.ask-send{width:34px;height:34px;background:var(--amber);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--amber-ink);font-size:13px;}
+
+.palette{
+  max-width:1400px;margin:64px auto 0;
+  display:flex;gap:28px;flex-wrap:wrap;
+  border-top:1px solid var(--border);
+  padding-top:32px;
+}
+.swatch{display:flex;align-items:center;gap:12px;}
+.swatch-color{width:36px;height:36px;border-radius:10px;border:1px solid var(--border-strong);}
+.swatch-name{font-size:13px;color:var(--chalk);font-weight:500;}
+.swatch-hex{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--mist);margin-top:1px;}
+</style>
+</head>
+<body>
+
+<div class="board-head">
+  <div class="eyebrow">ServiceShadow — visual design concepts</div>
+  <div class="board-title">Five core screens</div>
+  <div class="board-sub">Dark canvas, pointed-top hexagon system as the structural signature, warm amber for primary action against a near-black field. Honeycomb texture sits at 2–3% opacity throughout.</div>
+</div>
+
+<div class="gallery">
+
+  <div class="frame-wrap">
+    <div class="phone"><div class="screen">
+      <div class="island"></div>
+      <div class="statusbar"><span>9:41</span><div class="dots"><span></span><span></span><span style="height:10px"></span><span style="height:6px"></span></div></div>
+      <div class="content">
+        <div class="greet">Good morning, Sam</div>
+        <div class="date">Tuesday, July 27</div>
+        <div class="brief-card">
+          <div class="brief-stat"><div class="brief-num">3</div><div class="brief-lbl">visits today</div></div>
+          <div class="brief-stat"><div class="brief-num">2</div><div class="brief-lbl">reminders</div></div>
+          <div class="brief-stat"><div class="brief-num">1</div><div class="brief-lbl">proposal overdue</div></div>
+        </div>
+        <div class="cta-row">
+          <div class="hex hex-lg"><div class="cta-label">Start<br>visit</div></div>
+          <div class="cta-caption">Tap to begin — voice starts automatically</div>
+        </div>
+        <div class="sub-row">
+          <div class="sub-item"><div class="hex hex-md" style="color:var(--chalk);font-size:11px;">Ask</div><span>Ask ServiceShadow</span></div>
+          <div class="sub-item"><div class="hex hex-md" style="color:var(--chalk);font-size:11px;">Time</div><span>Timeline</span></div>
+        </div>
+        <div class="section-lbl">Needs attention</div>
+        <div class="remind-row">
+          <div class="hex hex-tag"></div>
+          <div class="remind-text"><div class="remind-cust">Westgate Plaza</div><div class="remind-sub">Proposal follow-up · 9 days overdue</div></div>
+        </div>
+        <div class="remind-row" style="border-bottom:none;">
+          <div class="hex hex-tag dusk"></div>
+          <div class="remind-text"><div class="remind-cust">ABC Apartments</div><div class="remind-sub">Irrigation check due this week</div></div>
+        </div>
+        <div class="navbar">
+          <div class="hex hex-nav active"></div>
+          <div class="hex hex-nav"></div>
+          <div class="hex hex-nav"></div>
+        </div>
+      </div>
+    </div></div>
+    <div class="frame-label"><b>Home</b> — morning briefing</div>
+  </div>
+
+  <div class="frame-wrap">
+    <div class="phone"><div class="screen">
+      <div class="island"></div>
+      <div class="statusbar"><span>9:41</span><div class="dots"><span></span><span></span><span style="height:10px"></span><span style="height:6px"></span></div></div>
+      <div class="content">
+        <div class="topbar">
+          <div class="back-ic">‹</div>
+          <div class="topbar-title"><div class="name">Riverside Apartments</div><div class="sub">Bldg C · dryer vent service</div></div>
+          <div class="timer-chip"><span class="rec-dot"></span>14:32</div>
+        </div>
+        <div class="mic-stage">
+          <div class="mic-ring"></div>
+          <div class="hex hex-lg" style="width:140px;height:140px;">
+            <div class="waveform">
+              <span style="height:8px"></span><span style="height:16px"></span><span style="height:24px"></span><span style="height:14px"></span><span style="height:20px"></span><span style="height:10px"></span>
+            </div>
+          </div>
+          <div class="cam-chip" style="position:static;margin-top:14px;">
+            <div class="hex hex-sm" style="color:var(--chalk);font-size:9px;">Photo</div>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:center;">
+          <div class="type-pill">Type instead</div>
+        </div>
+        <div class="transcript-card">
+          <span class="live">● listening</span>
+          "...vent has heavy lint buildup near the roof cap, customer mentioned wanting to move to quarterly service instead of annual..."
+          <div class="task-detect">Task detected — replace roof cap</div>
+        </div>
+      </div>
+    </div></div>
+    <div class="frame-label"><b>Active visit</b> — voice + type fallback</div>
+  </div>
+
+  <div class="frame-wrap">
+    <div class="phone"><div class="screen">
+      <div class="island"></div>
+      <div class="statusbar"><span>9:41</span><div class="dots"><span></span><span></span><span style="height:10px"></span><span style="height:6px"></span></div></div>
+      <div class="content">
+        <div class="topbar"><div class="back-ic">‹</div><div class="topbar-title"><div class="name">Visit summary</div><div class="sub">Riverside Apartments · Jul 27</div></div></div>
+        <div class="sum-card">Cleared heavy lint buildup near the roof cap on Bldg C. Customer asked about moving from annual to quarterly service given the buildup rate. No damage to ductwork observed.</div>
+        <div class="section-lbl">Tasks (3)</div>
+        <div class="task-row"><div class="hex hex-tag"></div><div><div class="t-text">Replace roof cap</div><div class="t-sub">Due next visit</div></div></div>
+        <div class="task-row"><div class="hex hex-tag dusk"></div><div><div class="t-text">Send quarterly service pricing</div><div class="t-sub">This week</div></div></div>
+        <div class="task-row"><div class="hex hex-tag"></div><div><div class="t-text">Log lint volume photo</div><div class="t-sub">Attached</div></div></div>
+        <div class="section-lbl" style="margin-top:6px;">Proposal draft</div>
+        <div class="proposal-card">
+          <div class="proposal-top"><div class="proposal-name">Quarterly vent service</div><div class="proposal-price">$340/qtr</div></div>
+          <div class="proposal-desc">Based on 3 prior visits and current buildup rate at this property.</div>
+        </div>
+        <div class="photo-strip">
+          <div class="photo-thumb"></div><div class="photo-thumb"></div><div class="photo-thumb"></div>
+        </div>
+        <div class="action-bar">
+          <div class="btn-primary">Save visit</div>
+          <div class="btn-ghost">↗</div>
+        </div>
+      </div>
+    </div></div>
+    <div class="frame-label"><b>Visit summary</b> — review and handoff</div>
+  </div>
+
+  <div class="frame-wrap">
+    <div class="phone"><div class="screen">
+      <div class="island"></div>
+      <div class="statusbar"><span>9:41</span><div class="dots"><span></span><span></span><span style="height:10px"></span><span style="height:6px"></span></div></div>
+      <div class="content">
+        <div class="cust-head">
+          <div class="hex hex-avatar">RA</div>
+          <div><div class="cust-name">Riverside Apartments</div><div class="cust-meta">12 visits · customer since 2023</div></div>
+        </div>
+        <div class="section-lbl">Timeline</div>
+        <div class="tl-row"><div class="hex hex-tag"></div><div class="tl-body"><div class="tl-title">Visit completed</div><div class="tl-date">JUL 27</div><div class="tl-desc">Dryer vent cleared, quarterly proposal drafted</div></div></div>
+        <div class="tl-row"><div class="hex hex-tag dusk"></div><div class="tl-body"><div class="tl-title">Proposal sent</div><div class="tl-date">JUL 20</div><div class="tl-desc">Annual renewal, $1,180</div></div></div>
+        <div class="tl-row"><div class="hex hex-tag"></div><div class="tl-body"><div class="tl-title">Task completed</div><div class="tl-date">JUL 10</div><div class="tl-desc">Replaced flexible ducting, unit 4B</div></div></div>
+        <div class="tl-row"><div class="hex hex-tag dusk"></div><div class="tl-body"><div class="tl-title">Visit completed</div><div class="tl-date">JUL 10</div><div class="tl-desc">Routine inspection, 4 photos attached</div></div></div>
+      </div>
+    </div></div>
+    <div class="frame-label"><b>Customer timeline</b> — full history</div>
+  </div>
+
+  <div class="frame-wrap">
+    <div class="phone"><div class="screen">
+      <div class="island"></div>
+      <div class="statusbar"><span>9:41</span><div class="dots"><span></span><span></span><span style="height:10px"></span><span style="height:6px"></span></div></div>
+      <div class="content">
+        <div class="page-title">Ask ServiceShadow</div>
+        <div class="page-sub">Answers pulled from every visit you've logged</div>
+        <div class="chat-row user"><div class="bubble user">Which customers need proposals this week?</div></div>
+        <div class="chat-row">
+          <div class="hex hex-avatar" style="width:32px;height:32px;font-size:11px;">A</div>
+          <div class="bubble ai">Three customers are ready for a proposal:
+            <ul>
+              <li>Westgate Plaza — renewal overdue</li>
+              <li>Riverside Apartments — quarterly upsell</li>
+              <li>Corbin HOA — irrigation repair</li>
+            </ul>
+          </div>
+        </div>
+        <div class="ask-input"><span>Ask about any customer or visit...</span><div class="ask-send">↑</div></div>
+      </div>
+    </div></div>
+    <div class="frame-label"><b>Ask ServiceShadow</b> — natural language recall</div>
+  </div>
+
+</div>
+
+<div class="palette">
+  <div class="swatch"><div class="swatch-color" style="background:#0B0D10;"></div><div><div class="swatch-name">ServiceShadow ink</div><div class="swatch-hex">#0B0D10 — background</div></div></div>
+  <div class="swatch"><div class="swatch-color" style="background:#14181D;"></div><div><div class="swatch-name">Cell</div><div class="swatch-hex">#14181D — surfaces</div></div></div>
+  <div class="swatch"><div class="swatch-color" style="background:#F5F6F4;"></div><div><div class="swatch-name">Chalk</div><div class="swatch-hex">#F5F6F4 — primary text</div></div></div>
+  <div class="swatch"><div class="swatch-color" style="background:#E8A33D;"></div><div><div class="swatch-name">Signal amber</div><div class="swatch-hex">#E8A33D — primary action</div></div></div>
+  <div class="swatch"><div class="swatch-color" style="background:#56697D;"></div><div><div class="swatch-name">ServiceShadow dusk</div><div class="swatch-hex">#56697D — secondary / info</div></div></div>
+  <div class="swatch"><div class="swatch-color" style="background:#E2665B;"></div><div><div class="swatch-name">Coral</div><div class="swatch-hex">#E2665B — recording / alerts only</div></div></div>
+</div>
+
+</body>
+</html>

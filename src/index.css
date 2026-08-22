@@ -1,0 +1,105 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ink: #0b0d10;
+  --cell: #14181d;
+  --cell-2: #1b2027;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.14);
+  --chalk: #f5f6f4;
+  --mist: #9aa1a9;
+  --mist-dim: #666c74;
+  --amber: #e8a33d;
+  --amber-dim: #3a2a12;
+  --amber-ink: #26190a;
+  --dusk: #56697d;
+  --dusk-dim: #1b232c;
+  --dusk-ink: #0e1820;
+  --shadow: #3a4450;
+  --coral: #e2665b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--ink);
+  font-family: 'Inter', sans-serif;
+  color: var(--chalk);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+@layer utilities {
+  .font-head {
+    font-family: 'Manrope', sans-serif;
+  }
+  .font-mono {
+    font-family: 'IBM Plex Mono', monospace;
+  }
+}
+
+@keyframes atlas-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
+
+@keyframes atlas-ring {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(1.06);
+  }
+}
+
+.animate-atlas-pulse {
+  animation: atlas-pulse 1.4s infinite;
+}
+
+.animate-atlas-ring {
+  animation: atlas-ring 1.8s infinite;
+}
+
+@keyframes atlas-wave {
+  0%,
+  100% {
+    transform: scaleY(1);
+  opacity: 0.85;
+  }
+  50% {
+    transform: scaleY(1.5);
+    opacity: 1;
+  }
+}
+
+.wave-bar {
+  animation: atlas-wave 1s infinite ease-in-out;
+  transform-origin: center;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

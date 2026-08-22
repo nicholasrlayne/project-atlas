@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ServiceShadow — Customers view</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0B0D10; --cell:#14181D; --cell-2:#1B2027; --border:rgba(255,255,255,0.08); --border-strong:rgba(255,255,255,0.14);
+  --chalk:#F5F6F4; --mist:#9AA1A9; --mist-dim:#666C74;
+  --amber:#E8A33D; --amber-ink:#26190A; --amber-dim:#3A2A12;
+  --dusk:#56697D; --dusk-dim:#1B232C;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--ink);font-family:'Inter',sans-serif;padding:56px 40px;}
+.head{max-width:1200px;margin:0 auto 44px;}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:var(--amber);margin-bottom:12px;}
+.title{font-family:'Manrope';font-weight:800;font-size:30px;color:var(--chalk);letter-spacing:-0.01em;}
+.sub{color:var(--mist);font-size:14.5px;margin-top:10px;line-height:1.6;max-width:640px;}
+.gallery{max-width:1200px;margin:0 auto;display:flex;gap:40px;flex-wrap:wrap;align-items:flex-start;}
+.frame-wrap{width:300px;}
+.frame-label{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--mist-dim);letter-spacing:0.04em;margin-top:18px;padding-left:4px;line-height:1.6;}
+.frame-label b{color:var(--mist);font-weight:500;}
+
+.phone{width:300px;height:648px;background:#000;border-radius:42px;padding:10px;box-shadow:0 0 0 1px rgba(255,255,255,0.06);}
+.screen{width:100%;height:100%;background:var(--ink);border-radius:34px;overflow:hidden;position:relative;display:flex;flex-direction:column;}
+.island{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:80px;height:22px;background:#000;border-radius:14px;z-index:20;}
+.statusbar{display:flex;justify-content:space-between;align-items:center;padding:16px 22px 4px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--chalk);}
+.statusbar .dots{display:flex;gap:4px;align-items:center;}
+.statusbar .dots span{width:3px;height:8px;background:var(--chalk);border-radius:1px;display:inline-block;}
+.content{flex:1;overflow:hidden;padding:14px 18px 0;display:flex;flex-direction:column;}
+
+.hexpoly{clip-path:polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);}
+.hexb{position:relative;flex-shrink:0;}
+.hexb .border-layer{position:absolute;inset:0;}
+.hexb .fill-layer{position:absolute;display:flex;align-items:center;justify-content:center;flex-direction:column;}
+
+.hex-tag{width:22px;height:22px;}
+.hex-tag.amber .border-layer{background:var(--amber);}
+.hex-tag.amber .fill-layer{inset:2px;background-color:var(--amber-dim);background-image:linear-gradient(127deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0) 50%, rgba(0,0,0,0.12) 100%);}
+.hex-tag.dusk .border-layer{background:var(--dusk);}
+.hex-tag.dusk .fill-layer{inset:2px;background-color:var(--dusk-dim);background-image:linear-gradient(127deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0) 50%, rgba(0,0,0,0.12) 100%);}
+
+.hex-avatar-sm{width:40px;height:40px;}
+.hex-avatar-sm .border-layer{background:var(--amber);}
+.hex-avatar-sm .fill-layer{
+  inset:2px;background-color:var(--amber);
+  background-image:linear-gradient(127deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.08) 26%, rgba(255,255,255,0) 48%, rgba(0,0,0,0.1) 80%, rgba(0,0,0,0.2) 100%);
+}
+.hex-avatar-sm .lbl{font-family:'Manrope';font-weight:800;font-size:12px;color:var(--amber-ink);}
+
+.hex-avatar-pin{width:40px;height:40px;}
+.hex-avatar-pin .border-layer{background:var(--dusk);}
+.hex-avatar-pin .fill-layer{
+  inset:2px;background-color:var(--dusk-dim);
+  background-image:linear-gradient(127deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0) 50%, rgba(0,0,0,0.12) 100%);
+}
+.hex-avatar-pin .lbl{font-size:14px;color:var(--dusk);}
+
+.hex-nav{width:30px;height:30px;}
+.hex-nav .border-layer{background:var(--border-strong);}
+.hex-nav .fill-layer{inset:1.5px;background:transparent;}
+.hex-nav.active .border-layer{background:var(--amber);}
+.hex-nav.active .fill-layer{inset:1.5px;background-color:var(--amber-dim);background-image:linear-gradient(127deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 50%, rgba(0,0,0,0.12) 100%);}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;}
+.nav-item span{font-size:9px;color:var(--mist-dim);font-family:'IBM Plex Mono',monospace;letter-spacing:0.03em;}
+.nav-item.active span{color:var(--amber);}
+
+.page-title{font-family:'Manrope';font-weight:700;font-size:19px;color:var(--chalk);margin:2px 0 12px;}
+
+.search-box{
+  display:flex;align-items:center;gap:8px;
+  background:var(--cell-2);border:1px solid var(--border-strong);
+  border-radius:14px;padding:10px 14px;margin-bottom:16px;
+}
+.search-box input{background:transparent;border:none;outline:none;color:var(--chalk);font-size:13px;font-family:'Inter';width:100%;}
+.search-box input::placeholder{color:var(--mist-dim);}
+.search-icon{color:var(--mist-dim);font-size:14px;}
+
+.section-lbl{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.06em;text-transform:uppercase;color:var(--mist-dim);margin-bottom:8px;margin-top:4px;}
+
+.cust-row{display:flex;align-items:center;gap:11px;padding:10px 0;border-bottom:1px solid var(--border);}
+.cust-row:last-child{border-bottom:none;}
+.cust-row .primary{font-size:13px;color:var(--chalk);font-weight:600;}
+.cust-row .secondary{font-size:11px;color:var(--mist);margin-top:2px;}
+.cust-row .chev{margin-left:auto;color:var(--mist-dim);font-size:14px;}
+
+.empty-state{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  color:var(--mist-dim);font-size:12.5px;text-align:center;padding-bottom:60px;
+}
+
+/* customer/property detail */
+.detail-head{display:flex;align-items:center;gap:11px;padding:4px 0 4px;}
+.detail-head .dname{font-size:15px;color:var(--chalk);font-weight:700;font-family:'Manrope';}
+.detail-head .dmeta{font-size:11px;color:var(--mist);margin-top:2px;}
+.back-ic{width:26px;height:26px;border-radius:8px;background:var(--cell-2);display:flex;align-items:center;justify-content:center;color:var(--chalk);font-size:13px;flex-shrink:0;}
+
+.see-all-link{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:11.5px;color:var(--dusk);
+  margin:10px 0 16px;
+  padding-bottom:2px;border-bottom:1px solid rgba(79,209,179,0.3);
+  width:fit-content;
+}
+
+.day-group{margin-bottom:16px;}
+.day-label{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--mist-dim);letter-spacing:0.05em;margin-bottom:8px;}
+.visit-row{display:flex;align-items:center;gap:10px;background:var(--cell);border:1px solid var(--border);border-radius:12px;padding:11px 12px;margin-bottom:8px;}
+.visit-row .vtitle{font-size:12.5px;color:var(--chalk);font-weight:500;}
+.visit-row .vsub{font-size:10.5px;color:var(--mist);margin-top:2px;}
+.visit-row .chev{margin-left:auto;color:var(--mist-dim);font-size:13px;}
+</style>
+</head>
+<body>
+
+<div class="head">
+  <div class="eyebrow">ServiceShadow — customers view</div>
+  <div class="title">Three screens, one drill-down</div>
+  <div class="sub">Search resolves to either a customer-scoped or property-scoped result. Visit detail (not shown again here) reuses the existing Visit Summary screen, read-only.</div>
+</div>
+
+<div class="gallery">
+
+  <div class="frame-wrap">
+    <div class="phone"><div class="screen">
+      <div class="island"></div>
+      <div class="statusbar"><span>9:41</span><div class="dots"><span></span><span></span><span style="height:10px"></span><span style="height:6px"></span></div></div>
+      <div class="content">
+        <div class="page-title">Customers</div>
+        <div class="search-box"><span class="search-icon">⌕</span><input placeholder="Search name or property..." /></div>
+
+        <div class="section-lbl">Recent activity</div>
+
+        <div class="cust-row">
+          <div class="hexb hex-avatar-sm"><div class="border-layer hexpoly"></div><div class="fill-layer hexpoly"><div class="lbl">RA</div></div></div>
+          <div><div class="primary">Riverside Apartments</div><div class="secondary">3 properties · 12 visits</div></div>
+          <div class="chev">›</div>
+        </div>
+        <div class="cust-row">
+          <div class="hexb hex-avatar-sm"><div class="border-layer hexpoly"></div><div class="fill-layer hexpoly"><div class="lbl">WP</div></div></div>
+          <div><div class="primary">Westgate Plaza</div><div class="secondary">1 property · 5 visits</div></div>
+          <div class="chev">›</div>
+        </div>
+        <div class="cust-row">
+          <div class="hexb hex-avatar-sm"><div class="border-layer hexpoly"></div><div class="fill-layer hexpoly"><div class="lbl">CH</div></div></div>
+          <div><div class="primary">Corbin HOA</div><div class="secondary">2 properties · 8 visits</div></div>
+          <div class="chev">›</div>
+        </div>
+
+        <div class="section-lbl" style="margin-top:14px;">Matches for "franklin"</div>
+        <div class="cust-row">
+          <div class="hexb hex-avatar-pin"><div class="border-layer hexpoly"></div><div class="fill-layer hexpoly"><div class="lbl">◈</div></div></div>
+          <div><div class="primary">123 Franklin Rd · Apt A</div><div class="secondary">Owned by Riverside Apartments</div></div>
+          <div class="chev">›</div>
+        </div>
+
+        <div style="margin-top:auto;padding:14px 0 20px;border-top:1px solid var(--border);display:flex;justify-content:space-around;">
+          <div class="nav-item active"><div class="hexb hex-nav active"><div class="border-layer hexpoly"></div><div class="fill-layer hexpoly"></div></div><span>Home</span></div>
+          <div class="nav-item"><div class="hexb hex-nav"><div class="border-layer hexpoly"></div><div class="fill-layer hexpoly"></div></div><span>Customers</span></div>
+          <div class="nav-item"><div class="hexb hex-nav"><div class="border-layer hexpoly"></div><div class="fill-layer hexpoly"></div></div><span>Ask</span></div>
+        </div>
+      </div>
+    </div></div>
+    <div class="frame-label"><b>Customers</b> — two result types: customer match (amber avatar, business name) vs property match (dusk pin, address as primary line)</div>
+  </div>
+
+  <div class="frame-wrap">
+    <div class="phone"><div class="screen">
+      <div class="island"></div>
+      <div class="statusbar"><span>9:41</span><div class="dots"><span></span><span></span><span style="height:10px"></span><span style="height:6px"></span></div></div>
+      <div class="content">
+        <div class="detail-head"><div class="back-ic">‹</div><div><div class="dname">Riverside Apartments</div><div class="dmeta">3 properties · 12 visits total</div></div></div>
+
+        <div class="day-group">
+          <div class="day-label">JUL 27</div>
+          <div class="visit-row">
+            <div class="hexb hex-tag amber"><div class="border-layer hexpoly"></div><div class="fill-layer hexpoly"></div></div>
+            <div><div class="vtitle">Dryer vent service</div><div class="vsub">Bldg C · quarterly proposal drafted</div></div>
+            <div class="chev">›</div>
+          </div>
+        </div>
+
+        <div class="day-group">
+          <div class="day-label">JUL 20</div>
+          <div class="visit-row">
+            <div class="hexb hex-tag dusk"><div class="border-layer hexpoly"></div><div class="fill-layer hexpoly"></div></div>
+            <div><div class="vtitle">Proposal sent</div><div class="vsub">Bldg C · annual renewal, $1,180</div></div>
+            <div class="chev">›</div>
+          </div>
+        </div>
+
+        <div class="day-group">
+          <div class="day-label">JUL 10</div>
+          <div class="visit-row">
+            <div class="hexb hex-tag dusk"><div class="border-layer hexpoly"></div><div class="fill-layer hexpoly"></div></div>
+            <div><div class="vtitle">Task completed</div><div class="vsub">Unit 4B · flexible ducting replaced</div></div>
+            <div class="chev">›</div>
+          </div>
+          <div class="visit-row">
+            <div class="hexb hex-tag amber"><div class="border-layer hexpoly"></div><div class="fill-layer hexpoly"></div></div>
+            <div><div class="vtitle">Routine inspection</div><div class="vsub">Bldg A · 4 photos attached</div></div>
+            <div class="chev">›</div>
+          </div>
+        </div>
+      </div>
+    </div></div>
+    <div class="frame-label"><b>Customer detail</b> — full scope, all properties, visits grouped by day. Multi-visit days (Jul 10) show as stacked rows.</div>
+  </div>
+
+  <div class="frame-wrap">
+    <div class="phone"><div class="screen">
+      <div class="island"></div>
+      <div class="statusbar"><span>9:41</span><div class="dots"><span></span><span></span><span style="height:10px"></span><span style="height:6px"></span></div></div>
+      <div class="content">
+        <div class="detail-head"><div class="back-ic">‹</div><div><div class="dname">123 Franklin Rd · Apt A</div><div class="dmeta">Riverside Apartments · 4 visits</div></div></div>
+
+        <div class="see-all-link">See all properties for Riverside Apartments →</div>
+
+        <div class="day-group">
+          <div class="day-label">JUL 27</div>
+          <div class="visit-row">
+            <div class="hexb hex-tag amber"><div class="border-layer hexpoly"></div><div class="fill-layer hexpoly"></div></div>
+            <div><div class="vtitle">Dryer vent service</div><div class="vsub">Quarterly proposal drafted</div></div>
+            <div class="chev">›</div>
+          </div>
+        </div>
+
+        <div class="day-group">
+          <div class="day-label">MAY 14</div>
+          <div class="visit-row">
+            <div class="hexb hex-tag amber"><div class="border-layer hexpoly"></div><div class="fill-layer hexpoly"></div></div>
+            <div><div class="vtitle">Routine inspection</div><div class="vsub">No issues found</div></div>
+            <div class="chev">›</div>
+          </div>
+        </div>
+      </div>
+    </div></div>
+    <div class="frame-label"><b>Property detail</b> — scoped to just this unit. "See all properties" bridges back up to the full customer view.</div>
+  </div>
+
+</div>
+
+</body>
+</html>
